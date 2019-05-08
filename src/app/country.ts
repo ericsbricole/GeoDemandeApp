@@ -8,7 +8,7 @@ export class Country {
     topLevelDomain: string;
     alpha2Code: string;
     alpha3Code: string;
-    callingCode: string[];
+    callingCodes: string[];
     capital: string;
     altSpellings: string[];
     region: string;

@@ -11,24 +11,28 @@ import { of } from 'rxjs';
 })
 export class CountryDetailComponent implements OnInit {
   private _country: Country;
+  private _kTranslations: string[];
 
   get country() {
     return this._country;
   }
-  private kTranslations: string[];
+
+  get kTranslations() {
+    return this._kTranslations;
+  }
 
   constructor(private searchService: SearchService,
-              private route: ActivatedRoute) { }
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     let alphaCode = this.route.snapshot.params["alpha3Code"];
     this.searchService.searchCountryByAlphaCode(alphaCode)
-                      .subscribe(
-                        (country) => {
-                          this._country = country;
-                          this.kTranslations = Object.keys(this._country.translations);
-                        }
-                      );
+      .subscribe(
+        (country) => {
+          this._country = country;
+          this._kTranslations = Object.keys(this._country.translations);
+        }
+      );
   }
 
 }

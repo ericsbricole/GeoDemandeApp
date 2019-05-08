@@ -18,16 +18,25 @@ export class SearchComponent implements OnInit {
 
   private _countries: Country[] = [];
 
+  private _responses: Country[][];
+  private _searched: boolean = false;
+
   get countries() {
     return this._countries;
   }
 
-  private responses: Country[][];
-  private searched: boolean = false;
+  get responses() {
+    return this._responses;
+  }
+
+  get searched() {
+    return this._searched;
+  }
+
   searchName: string = "nom du pays";
 
-  constructor(private searchService : SearchService,
-              private formBuilder: FormBuilder) { }
+  constructor(private searchService: SearchService,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.initForm();
@@ -46,8 +55,8 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  research(): void{
-    this.searched = true;
+  research(): void {
+    this._searched = true;
     const formValue = this._cForm.value;
     let alphaCode: string = formValue["inpAlphaCode"];
     let name: string = formValue["inpName"];
@@ -60,100 +69,100 @@ export class SearchComponent implements OnInit {
     this._countries = [];
     let obsToRequest: Observable<Country[]>[] = [];
 
-    if (alphaCode.trim() !== ""){
+    if (alphaCode.trim() !== "") {
       this.searchService.searchCountryByAlphaCode(alphaCode)
-          .subscribe(
-            (country) => this._countries[0] = country
-          );
+        .subscribe(
+          (country) => this._countries[0] = country
+        );
     }
-    else{
+    else {
 
-      if (name.trim() !== ""){
+      if (name.trim() !== "") {
         obsToRequest.push(this.searchService.searchCountryByName(name));
       }
-      if (reg !== ""){
+      if (reg !== "") {
         obsToRequest.push(this.searchService.searchCountryByReg(reg));
       }
-      if (capital !== ""){
+      if (capital !== "") {
         obsToRequest.push(this.searchService.searchCountryByCapital(capital));
       }
-      if (call !== ""){
+      if (call !== "") {
         obsToRequest.push(this.searchService.searchCountryByCallingCode(call));
       }
-      if (lang !== ""){
+      if (lang !== "") {
         obsToRequest.push(this.searchService.searchCountryByLanguage(lang));
       }
-      if (regBloc !== ""){
+      if (regBloc !== "") {
         obsToRequest.push(this.searchService.searchCountryByRegBloc(regBloc));
       }
     }
 
 
-    if (obsToRequest.length >0){
+    if (obsToRequest.length > 0) {
       this.searchService.requestDataFromMultipleSources(obsToRequest)
-          .subscribe(
-            (countries) => { this.responses=countries; },
-            (error) => console.error("this error occured hile getting countries from several requests: " + error.name),
-            () => {
-              this.findSelectedByUser();
-            }
-            );
+        .subscribe(
+          (countries) => { this._responses = countries; },
+          (error) => console.error("this error occured hile getting countries from several requests: " + error.name),
+          () => {
+            this.findSelectedByUser();
+          }
+        );
     }
 
   }
 
-  findSelectedByUser(): void{
+  findSelectedByUser(): void {
     let countIterationsOfCountries = {};
-    this.responses.forEach( (countriesFound) => {
-      countriesFound.forEach( (countryFound) => {
-        countryFound.name in countIterationsOfCountries? countIterationsOfCountries[countryFound.name]++ : countIterationsOfCountries[countryFound.name] = 1;
-      } )
-    } ); // at this point, countIterationsOfCountries knows how many times we have found each country
-    
+    this._responses.forEach((countriesFound) => {
+      countriesFound.forEach((countryFound) => {
+        countryFound.name in countIterationsOfCountries ? countIterationsOfCountries[countryFound.name]++ : countIterationsOfCountries[countryFound.name] = 1;
+      })
+    }); // at this point, countIterationsOfCountries knows how many times we have found each country
+
     let hits = Object.values(countIterationsOfCountries);
-    let max = Math.max.apply( null, hits );
-    
+    let max = Math.max.apply(null, hits);
+
     //we loop responses again to push countries found in each list, thus selected by each user-defined filters
-    this.responses.forEach( (countriesFound) => {
-      countriesFound.forEach( (countryFound) => {
-        if (countIterationsOfCountries[countryFound.name] === this.responses.length && this.canPushInCountries(countryFound)){
-          
+    this._responses.forEach((countriesFound) => {
+      countriesFound.forEach((countryFound) => {
+        if (countIterationsOfCountries[countryFound.name] === this._responses.length && this.canPushInCountries(countryFound)) {
+
           this._countries.push(countryFound);
         }
-      } )
-    } );
+      })
+    });
   }
 
   canPushInCountries(newCountry: Country): boolean {
     let newName = newCountry.name;
     let response: boolean = true;
-    this._countries.forEach( (country) =>{
-      if (country.name === newName){
+    this._countries.forEach((country) => {
+      if (country.name === newName) {
         response = false; //the country has already been added as a response filtered by the user, no need to add it again 
       }
-    } )
+    })
     return response;
   }
 
 
-  getAllCountries(){
+  getAllCountries() {
     this.searchService.getAllCountries()
-        .subscribe(
-          (countries) => { this._countries=countries; },
-          (error) => console.error("an error occured hile getting countries " + error),
-          () => console.log("completion of search for countries")
-          );
+      .subscribe(
+        (countries) => { this._countries = countries; },
+        (error) => console.error("an error occured hile getting countries " + error),
+        () => console.log("completion of search for countries")
+      );
   }
 
-  searchCountries(criteria: string){
+  searchCountries(criteria: string) {
     this.searchService.searchCountryByName(criteria)
-        .subscribe(
-          (countries) => {
-            this._countries=countries;
-          },
-          (error) => console.error("an error occured hile getting countries"),
-          () => console.log("completion of search for countries by name.")
-          );
+      .subscribe(
+        (countries) => {
+          this._countries = countries;
+        },
+        (error) => console.error("an error occured hile getting countries"),
+        () => console.log("completion of search for countries by name.")
+      );
   }
 
 }

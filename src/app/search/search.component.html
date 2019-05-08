@@ -1,0 +1,99 @@
+<div class="container">
+  <div class="row">
+    <div class="offset-2"></div>
+    <div class="col-8">
+      <form [formGroup]="cForm" (ngSubmit)="research()">
+        <div class="form-group">
+            <label for="name">Nom du pays (même incomplet)</label>
+            <input id="name" type="text" class="form-control" placeholder="exemples: Fran, France" formControlName="inpName">
+        </div>
+        <br>  
+        <div class="form-group">
+            <label for="alphaCode">Code alpha 2 ou alpha 3. Ce champ ne retourne qu'un pays, si indiqué, les autres champs seront ignorés.</label>
+            <input id="alphaCode" type="text" class="form-control" placeholder="examples: FR ou FRA, IT ou ITA" formControlName="inpAlphaCode">
+        </div>
+        <br>
+            <div class="form-group">
+              <label for="cap">Capitale</label>
+              <input id="cap" type="text" class="form-control" placeholder="examples: Paris, Rome" name="cap" formControlName="inpCapital">
+            </div>
+        <br>
+            <div class="form-group">
+              <label for="iso639_1">Languages en code ISO 639-1</label>
+              <input id="iso639_1" type="text" class="form-control" placeholder="examples: fr, it)" formControlName="inpLang">
+            </div>
+        <br>
+        <div class="form-group">
+          <label for="call">Code d'appel</label>
+              <input id="call" type="text" class="form-control" placeholder="examples: 33 (France), 39 (Italie)" formControlName="inpCall">
+          </div>
+          <br>
+          <div class="form-group">
+                  <label for="reg">Continent</label>
+                  <select id="reg" formControlName="inpReg">
+                      <option>Ne pas filtrer</option>
+                      <option>Africa</option>
+                      <option>Americas</option>
+                      <option>Asia</option>
+                      <option>Europe</option>
+                      <option>Oceania</option>
+                  </select>
+          </div>
+          <div class="form-group">
+                  <label for="regBloc">Bloc régional</label>
+                  <select id="regBloc" formControlName="inpRegBloc">
+                      <option>Ne pas filtrer</option>
+                      <option>EU (European Union)</option>
+                      <option>EFTA (European Free Trade Association)</option>
+                      <option>CARICOM (Caribbean Community)</option>
+                      <option>AU (African Union)</option>
+                      <option>USAN (Union of South American Nations)</option>
+                      <option>EEU (Eurasian Economic Union)</option>
+                      <option>AL (Arab League)</option>
+                      <option>ASEAN (Association of Southeast Asian Nations)</option>
+                      <option>CAIS (Central American Integration System)</option>
+                      <option>CEFTA (Central European Free Trade Agreement)</option>
+                      <option>NAFTA (North American Free Trade Agreement)</option>
+                      <option>SAARC (South Asian Association for Regional Cooperation)</option>
+                  </select>
+            </div>
+          <br>
+          <div class="row">
+              <div class="offset-4"></div>
+              <div class="col-4">
+                <button class="mx-auto btn btn-success" type="submit" (click)="research()">Rechercher</button>
+              </div>
+          </div>
+      </form>
+    </div>
+  </div>
+  <br>
+      
+      <div class="row">
+        <div class="offset-4"></div>
+        <div class="col-4 results">
+          <div *ngIf="!searched; else searchedBlock">
+            <div class="list-group">
+              <div class="list-group-item">Vos résultats s'afficheront ici</div>
+            </div>
+          </div>
+          <ng-template #searchedBlock>
+          <div *ngIf="countries.length>0; else noResult">
+            <span>{{countries.length}} pays trouvé(s) avec vos critères</span>
+            <br>
+             <div class="list-group">
+              <a class="list-group-item" *ngFor="let c of countries" [routerLink]="[ '/countryDetail', c.alpha3Code ]">
+                {{c.name}}
+              </a>
+            </div>    
+          </div>
+          <ng-template #noResult>
+            <span>Aucun résultat avec ces critères.</span>
+          </ng-template>
+        </ng-template>
+          
+        </div>
+      </div>
+      <br>
+      <br>
+</div>

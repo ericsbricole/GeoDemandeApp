@@ -1,0 +1,12 @@
+.container-fluid {
+    background-color: whitesmoke;
+}
+
+a {
+    color: steelblue;
+
+}
+
+a:hover {
+    text-decoration: none;
+}

@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="offset-4"></div>
+    <div class="col-4" style="text-align:center">
+      <h1>
+        <a [routerLink]="[ '/']">{{ title }}</a>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="offset-4"></div>
+    <div class="col-4" style="text-align:center">
+      <span>
+        Cette application Angular2+ est une interface graphique à l'API <a
+          href="https://restcountries.eu/">RestCountries</a>, qui est distribuée sous licence <a
+          href="http://www.mozilla.org/en-US/MPL/2.0/">MPL 2.0</a>. Cette application vous permet de chercher une liste
+        de pays sous plusieurs critères offerts par l'API RestCountries.
+      </span>
+    </div>
+  </div>
+  <br>
+
+  <div class="row">
+    <div class="col-12">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

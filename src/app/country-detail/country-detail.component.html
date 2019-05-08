@@ -1,0 +1,160 @@
+<div id="cDetailContainer" class="container-fluid text-center">
+  <div class="row">
+    <div class="mx-auto">
+      <h1 class="cName">
+        {{country.name}} ({{country.alpha2Code}}, {{country.alpha3Code}})
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-6 mx-auto">
+        <img [src]="country.flag" height=300>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-4 subTitle">
+        <h2>Géographie</h2>
+      </div>
+      <div class="col-4">
+          <h2>Divers</h2>
+        </div>
+        <div class="col-4">
+            <h2>Démographie</h2>
+          </div>
+
+    </div>
+  <div class="row mx-auto">
+    <div class="col-4 cInfo">
+        <br>
+      <br>
+      <div class="row">
+          <div class="col-6">Continent:</div>
+          <div class="col-6">{{country.region}}</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-6">Sous-région:</div>
+            <div class="col-6">{{country.subregion}}</div>
+          </div>
+        <br>
+        <div class="row" *ngIf="country.regionalBlocs.length==0; else atLeastOneBloc">
+            <div class="col-12">Aucun bloc régional</div>
+        </div>
+        <ng-template #atLeastOneBloc>
+          <div class="row" *ngIf="country.regionalBlocs.length==1; else severalBlocs">
+              <div class="col-6">Bloc régional:</div>
+                <div class="col-6"> {{country.regionalBlocs[0].name}} ({{country.regionalBlocs[0].acronym}})</div>
+            </div>
+            <ng-template #severalBlocs>
+              <div class="row" *ngFor="let rb of country.regionalBlocs; let i=index">
+                <div class="col-6">Bloc régional ({{i+1}}):</div>
+                <div class="col-6">{{rb.name}}</div>
+              </div>
+            </ng-template>
+          </ng-template>
+
+      <br>
+      <div class="row">
+          <div class="col-sm-6">Capitale</div>
+          <div class="col-sm-6">{{country.capital}}</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-6">Superficie:</div>
+          <div class="col-6">{{country.area | numberThousandsSeparator}}</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-6">Latitude:</div>
+          <div class="col-6">{{country.latlng[0]}}</div>
+          <div class="col-6">Longitude:</div>
+          <div class="col-6">{{country.latlng[1]}}</div>
+        </div>
+        <br>
+        <div class="row" *ngIf="country.borders.length==1; else severalBorders">
+            <div class="col-6">fuseau horaire:</div>
+              <div class="col-6"> {{country.borders[0]}}</div>
+          </div>
+          <ng-template #severalBorders>
+            <div class="row" *ngFor="let b of country.borders; let i=index">
+              <div class="col-6">Pays frontalier ({{i+1}}):</div>
+              <div class="col-6">{{b}}</div>
+            </div>
+          </ng-template>
+        <br>
+          <div class="row" *ngIf="country.timezones.length==1; else severalTimeZones">
+              <div class="col-6">fuseau horaire:</div>
+                <div class="col-6"> {{country.timezones[0]}}</div>
+            </div>
+            <ng-template #severalTimeZones>
+              <div class="row" *ngFor="let tz of country.timezones; let i=index">
+                <div class="col-6">fuseau horaire ({{i+1}}):</div>
+                <div class="col-6">{{tz}}</div>
+              </div>
+            </ng-template>
+        
+      <ng-template #severalCallingCodes>
+        <div class="row" *ngFor="let call of country.callingCodes; let i=index">
+          <div class="col-6">code d'appel ({{i+1}}):</div>
+          <div class="col-6">{{call}}</div>
+        </div>
+      </ng-template>
+      <br>
+        <div class="row">
+            <div class="col-6">Population:</div>
+            <div class="col-6">{{country.population | numberThousandsSeparator}}</div>
+          </div>
+  </div>
+  <div class="col-4 mx-auto cInfo">
+        <br>
+      <div class="row" *ngIf="country.callingCodes.length==1; else severalCallingCodes">
+        <div class="col-6">code d'appel:</div>
+          <div class="col-6"> {{country.callingCodes[0]}}</div>
+      </div>
+        <br>
+        <span>Monnaie(s):</span>
+        <br>
+        <div class="row" *ngFor="let curr of country.currencies">
+            <div class="col-12">{{curr.name}} ({{curr.code}}), symbole: {{curr.symbol}}</div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-6">Index de Gini:</div>
+            <div class="col-6">{{country.gini}}</div>
+          </div>
+  </div>
+  <div class="col-4 mx-auto cInfo">
+        <br>
+        <div class="row">
+          <div class="col-6">Gentilé (en anglais):</div>
+          <div class="col-6">{{country.demonym}}</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-6">Population:</div>
+            <div class="col-6">{{country.population | numberThousandsSeparator}}</div>
+          </div>
+          <br>
+          <div class="row" *ngIf="country.languages.length==1; else severalLanguages">
+              <div class="col-7">Langue (en anglais), iso639_1:</div>
+                <div class="col-5"> {{country.languages[0].name}}, {{country.languages[0].iso639_1}}</div>
+            </div>
+            <ng-template #severalLanguages>
+              <div class="row" *ngFor="let l of country.languages; let i=index">
+                <div class="col-7">Langue {{i+1}} (en anglais), iso639_1:</div>
+                <div class="col-4">{{l.name}}, {{l.iso639_1}}</div>
+              </div>
+            </ng-template>
+            <br>
+            <div class="row">
+              <div class="col-12">Traductions:</div>
+            </div>
+            <div class="row" *ngFor="let k of kTranslations; let i=index">
+              <div class="col-7">{{k}}:</div>
+              <div class="col-4">{{country.translations[k]}}</div>
+            </div>
+    </div>
+</div>
+<br>
+<a [routerLink]="[ '/' ]"><button class="btn btn-info">Retour au formulaire de recherche</button></a>

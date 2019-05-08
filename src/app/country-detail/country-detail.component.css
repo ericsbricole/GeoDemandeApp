@@ -1,0 +1,28 @@
+h2 {
+    border: 2px;
+    border-style: solid;
+    display: inline-block;
+}
+
+img {
+    border: 1px;
+    border-style: solid;
+}
+
+.subTitle {
+    display: inline-block;
+}
+
+#cDetailContainer{
+    background-color: whitesmoke;
+}
+
+.cInfo{
+    background-color: gainsboro;
+    border: 2px;
+    border-style: solid;
+}
+
+.firstLine{
+    background-color: whitesmoke
+}

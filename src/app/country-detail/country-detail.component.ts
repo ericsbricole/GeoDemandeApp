@@ -10,7 +10,11 @@ import { of } from 'rxjs';
   styleUrls: ['./country-detail.component.css']
 })
 export class CountryDetailComponent implements OnInit {
-  private country: Country;
+  private _country: Country;
+
+  get country() {
+    return this._country;
+  }
   private kTranslations: string[];
 
   constructor(private searchService: SearchService,
@@ -21,8 +25,8 @@ export class CountryDetailComponent implements OnInit {
     this.searchService.searchCountryByAlphaCode(alphaCode)
                       .subscribe(
                         (country) => {
-                          this.country = country;
-                          this.kTranslations = Object.keys(this.country.translations);
+                          this._country = country;
+                          this.kTranslations = Object.keys(this._country.translations);
                         }
                       );
   }

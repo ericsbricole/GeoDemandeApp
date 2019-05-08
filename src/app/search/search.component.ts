@@ -10,8 +10,18 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  private cForm: FormGroup;
-  private countries: Country[] = [];
+  private _cForm: FormGroup;
+
+  get cForm() {
+    return this._cForm;
+  }
+
+  private _countries: Country[] = [];
+
+  get countries() {
+    return this._countries;
+  }
+
   private responses: Country[][];
   private searched: boolean = false;
   searchName: string = "nom du pays";
@@ -25,7 +35,7 @@ export class SearchComponent implements OnInit {
 
 
   private initForm(): void {
-    this.cForm = this.formBuilder.group({
+    this._cForm = this.formBuilder.group({
       inpAlphaCode: "",
       inpName: "",
       inpLang: "",
@@ -38,7 +48,7 @@ export class SearchComponent implements OnInit {
 
   research(): void{
     this.searched = true;
-    const formValue = this.cForm.value;
+    const formValue = this._cForm.value;
     let alphaCode: string = formValue["inpAlphaCode"];
     let name: string = formValue["inpName"];
     let lang: string = formValue["inpLang"];
@@ -47,13 +57,13 @@ export class SearchComponent implements OnInit {
     let regBloc: string = formValue["inpRegBloc"] === "Ne pas filtrer" ? "" : formValue["inpRegBloc"].split(" (")[0];
     let capital: string = formValue["inpCapital"];
 
-    this.countries = [];
+    this._countries = [];
     let obsToRequest: Observable<Country[]>[] = [];
 
     if (alphaCode.trim() !== ""){
       this.searchService.searchCountryByAlphaCode(alphaCode)
           .subscribe(
-            (country) => this.countries[0] = country
+            (country) => this._countries[0] = country
           );
     }
     else{
@@ -108,7 +118,7 @@ export class SearchComponent implements OnInit {
       countriesFound.forEach( (countryFound) => {
         if (countIterationsOfCountries[countryFound.name] === this.responses.length && this.canPushInCountries(countryFound)){
           
-          this.countries.push(countryFound);
+          this._countries.push(countryFound);
         }
       } )
     } );
@@ -117,7 +127,7 @@ export class SearchComponent implements OnInit {
   canPushInCountries(newCountry: Country): boolean {
     let newName = newCountry.name;
     let response: boolean = true;
-    this.countries.forEach( (country) =>{
+    this._countries.forEach( (country) =>{
       if (country.name === newName){
         response = false; //the country has already been added as a response filtered by the user, no need to add it again 
       }
@@ -129,7 +139,7 @@ export class SearchComponent implements OnInit {
   getAllCountries(){
     this.searchService.getAllCountries()
         .subscribe(
-          (countries) => { this.countries=countries; },
+          (countries) => { this._countries=countries; },
           (error) => console.error("an error occured hile getting countries " + error),
           () => console.log("completion of search for countries")
           );
@@ -139,7 +149,7 @@ export class SearchComponent implements OnInit {
     this.searchService.searchCountryByName(criteria)
         .subscribe(
           (countries) => {
-            this.countries=countries;
+            this._countries=countries;
           },
           (error) => console.error("an error occured hile getting countries"),
           () => console.log("completion of search for countries by name.")

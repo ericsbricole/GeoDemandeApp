@@ -11,6 +11,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class SearchComponent implements OnInit {
   private _cForm: FormGroup;
+  private _selectedAlpha3Code: string;
 
   get cForm() {
     return this._cForm;
@@ -165,4 +166,12 @@ export class SearchComponent implements OnInit {
       );
   }
 
+  public updateSelectedA3C(alpha3Code: string) {
+    this._selectedAlpha3Code = alpha3Code;
+  }
+
+
+  get selectedAlpha3Code () {
+    return this._selectedAlpha3Code;
+  }
 }

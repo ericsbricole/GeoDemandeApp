@@ -7,7 +7,7 @@
             <label for="name">Nom du pays (même incomplet)</label>
             <input id="name" type="text" class="form-control" placeholder="exemples: Fran, France" formControlName="inpName">
         </div>
-        <br>  
+        <br>
         <div class="form-group">
             <label for="alphaCode">Code alpha 2 ou alpha 3. Ce champ ne retourne qu'un pays, si indiqué, les autres champs seront ignorés.</label>
             <input id="alphaCode" type="text" class="form-control" placeholder="examples: FR ou FRA, IT ou ITA" formControlName="inpAlphaCode">
@@ -68,7 +68,7 @@
     </div>
   </div>
   <br>
-      
+
       <div class="row">
         <div class="offset-4"></div>
         <div class="col-4 results">
@@ -82,16 +82,16 @@
             <span>{{countries.length}} pays trouvé(s) avec vos critères</span>
             <br>
              <div class="list-group">
-              <a class="list-group-item" *ngFor="let c of countries" [routerLink]="[ '/countryDetail', c.alpha3Code ]">
+              <a class="list-group-item" *ngFor="let c of countries" (mouseover)="updateSelectedA3C(c.alpha3Code)" (mouseout)="updateSelectedA3C(undefined)" [ngClass]="{'active': c.alpha3Code === selectedAlpha3Code}" [routerLink]="[ '/countryDetail', c.alpha3Code ]">
                 {{c.name}}
               </a>
-            </div>    
+            </div>
           </div>
           <ng-template #noResult>
             <span>Aucun résultat avec ces critères.</span>
           </ng-template>
         </ng-template>
-          
+
         </div>
       </div>
       <br>
